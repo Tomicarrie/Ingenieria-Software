@@ -36,16 +36,3 @@ popS (Sta [] capacidad) ciudad = Sta [] capacidad
 -- popS (Sta (palet:palets) capacidad) ciudad | (destinationP palet) == ciudad = popS (Sta palets capacidad) ciudad | otherwise = Sta (palet:palets) capacidad
 popS (Sta palets capacidad) ciudad | (destinationP (head palets)) == ciudad = popS (Sta (tail palets) capacidad) ciudad | otherwise = (Sta palets capacidad) 
 
-
-rutaCamion = newR ["salta", "busan", "miami", "mdq", "chubut", "varsovia"]
-p1 = newP "mdq" 20
-p2 = newP "miami" 10
-p3 = newP "salta" 15
-p4 = newP "busan" 50
-
-s1 = newS 60
-s2 = stackS s1 p2
-s3 = stackS s2 p1
-s4 = stackS s3 p1
-s5 = stackS s4 p1
---holdsS s3 p4 rutaCamion
