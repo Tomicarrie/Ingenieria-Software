@@ -37,7 +37,7 @@ truckGrande = (newT 3 5 (rutaLarga))
 
 truckVacio = (newT 0 5 (rutaLarga))
 
--- Test de la función newP en Palet
+
 testNewP :: Bool
 testNewP = 
   not (testF paletRoma10) &&    
@@ -45,25 +45,25 @@ testNewP =
   testF paletLondres0 &&        
   testF paletLondresNeg1        
 
--- Test de la función destinationP en Palet
+
 testDestinationP :: Bool
 testDestinationP = 
   destinationP paletRoma10 == "roma" && 
   destinationP paletParis5 == "paris"
 
--- Test de la función netP en Palet
+
 testNetP :: Bool
 testNetP = 
   netP paletRoma10 == 10 && 
   netP paletParis5 == 5
 
--- Test de la función newR en Route
+
 testNewR :: Bool
 testNewR =
   not (testF (rutaLarga)) && 
   (testF (rutaVacia)) 
 
--- Test de la función inOrderR en Route
+
 testInOrderR :: Bool
 testInOrderR =
   inOrderR rutaCorta "roma" "paris" == True && 
@@ -74,75 +74,82 @@ testInOrderR =
   inOrderR rutaLarga "mdq" "seul" == True 
 
 
--- Test de la función inRouteR en Route
+
 testInRouteR :: Bool
 testInRouteR =
   inRouteR rutaLarga "roma" == True && 
   inRouteR rutaLarga "londres" == False
 
--- Test de la función newS en Stack
+
 testNewS :: Bool
 testNewS =
   not (testF stack5) &&       
   testF (stack0) &&
   testF (stackNeg1)             
 
--- Test de la función freeCellsS en Stack
+
 testFreeCellsS :: Bool
 testFreeCellsS =
   freeCellsS stack5 == 5 &&
   freeCellsS (stackS stack5 paletRoma5) == 4
 
 
--- Test de la función stackS en Stack
+
 testStackS :: Bool
 testStackS =
-  let stack = stackS stack10 paletRoma5
-  in freeCellsS stack == 9 && netS stack == 5
+  freeCellsS stackAfter == 9 &&
+  netS stackAfter == 5
+  where
+    stackAfter = stackS stack10 paletRoma5
 
--- Test de la función holdsS en Stack
+
 testHoldsS :: Bool
 testHoldsS =
   holdsS stack10 paletRoma5 rutaLarga == True &&
   holdsS stack10 paletBerlin7 (rutaLarga) == False
 
--- Test de la función popS en Stack
+
 testPopS :: Bool
 testPopS = 
   freeCellsS (popS (stackS stack5 paletRoma10) "roma") == 5 
   && netS (popS (stackS stack10 paletRoma5) "roma") == 0
 
 
--- Test de la función newT en Truck
+
 testNewT :: Bool
 testNewT =
   not (testF truckGrande) &&    
   (testF truckVacio)           
 
--- Test de la función freeCellsT en Truck
+
 testFreeCellsT :: Bool
 testFreeCellsT =
   freeCellsT truckGrande == 15
 
--- Test de la función loadT en Truck
+
 testLoadT :: Bool
 testLoadT =
-  let truck = loadT truckGrande paletRoma5
-  in freeCellsT truck == 14 && netT truck == 5
+  freeCellsT truckAfterLoad == 14 &&
+  netT truckAfterLoad == 5
+  where
+    truckAfterLoad = loadT truckGrande paletRoma5
 
--- Test de la función unloadT en Truck
+
+
 testUnloadT :: Bool
 testUnloadT =
-  let truck = unloadT truckGrande "roma"
-  in freeCellsT truck == 15 && netT truck == 0
+  freeCellsT truckAfterUnload == 15 &&
+  netT truckAfterUnload == 0
+  where
+    truckAfterUnload = unloadT truckGrande "roma"
 
--- Test de la función netT en Truck
+
 testNetT :: Bool
 testNetT =
   netT truckGrande == 0 &&
   netT (loadT truckGrande paletRoma5) == 5
 
--- Lista con todos los tests
+
 t :: [Bool]
 t = [testNewP, testDestinationP, testNetP, testNewR, testInOrderR, testInRouteR, 
      testNewS, testFreeCellsS, testStackS, testHoldsS, 
