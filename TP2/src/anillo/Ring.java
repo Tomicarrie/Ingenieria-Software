@@ -1,71 +1,12 @@
-//package anillo;
-//import java.util.ArrayList;
-//
-//
-//public class Ring {
-//
-//    private ArrayList<Object> anillo = new ArrayList<Object>();
-//    private Integer curr = (-1);
-//
-//    public Ring next() {
-//        try {
-//            this.curr = (this.curr + 1) % this.anillo.size();
-//            return this;
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException();
-//        }
-//    }
-//
-//    public Object current() {
-//        try {
-//            return this.anillo.get(this.curr);
-//        } catch (Exception e) {
-//            throw new RuntimeException();
-//        }
-//    }
-//
-//    public Ring add( Object cargo ) {
-//
-//        ArrayList<Object> newRing = new ArrayList<Object>();
-//        newRing.add(cargo);
-//        int size = this.anillo.size();
-//
-//        for (int i = 0; i < size; i++) {
-//            newRing.add(this.anillo.get((i + this.curr) % size));
-//        }
-//
-//        this.curr = 0;
-//        this.anillo = newRing;
-//        return this;
-//
-//    }
-//
-//    public Ring remove() {
-//        ArrayList<Object> newRing = new ArrayList<Object>();
-//        int size = this.anillo.size();
-//
-//        for (int i = 0; i < size - 1; i++) {
-//            newRing.add(this.anillo.get((i + this.curr + 1) % size));
-//        }
-//
-//        this.curr = 0;
-//        this.anillo = newRing;
-//        return this;
-//    }
-//}
 
 package anillo;
 
+import org.junit.jupiter.api.function.Executable;
+
+import java.util.Stack;
+import java.util.concurrent.Callable;
 
 class nullLink extends Link {
-
-//    public nullLink() {
-//        super();
-//        cargo = null;
-//        next_link = null;
-//        prev_link = null;
-//    }
 
     public Object cargo = null;
     public Link next_link = null;
@@ -83,7 +24,7 @@ class nullLink extends Link {
         throw new RuntimeException();
     }
 
-    public Link add( Object cargo ) {
+    public Link add( Object cargo, Stack<Callable<Link>> stack, Ring ring) {
         cargoLink newLink = new cargoLink(cargo);
         newLink.next_link = newLink;
         newLink.prev_link = newLink;
@@ -98,13 +39,16 @@ class cargoLink extends Link {
         this.next_link = null;
         this.prev_link = null;
     }
-    public Link add( Object cargo) {
+    public Link add( Object cargo, Stack<Callable<Link>> stack, Ring ring) {
         cargoLink newLink = new cargoLink(cargo);
         newLink.next_link = this;
         newLink.prev_link = this.prev_link;
 
         this.prev_link.next_link = newLink;
         this.prev_link = newLink;
+
+        stack.push(() -> ring.current.remove());
+
         return newLink;
     }
 
@@ -113,12 +57,8 @@ class cargoLink extends Link {
     }
 
     public Link remove() {
-        if ( this.next_link == this ) {
-            return new nullLink();
-        }
         this.prev_link.next_link = this.next_link;
         this.next_link.prev_link = this.prev_link;
-        // destruir ??
         return this.next_link;
     }
 
@@ -128,7 +68,14 @@ class cargoLink extends Link {
 }
 
 public class Ring {
-    public Link current = new nullLink();
+    public Link current;
+    public Stack< Callable<Link>>stack;
+
+    public Ring() {
+        current = new nullLink();
+        stack = new Stack<>();
+        stack.push(() -> new nullLink());
+    }
 
     public Ring next() {
         current = current.next();
@@ -140,12 +87,20 @@ public class Ring {
     }
 
     public Ring add( Object cargo ) {
-        current = current.add(cargo);
+        current = current.add(cargo, stack, this);
         return this;
+
     }
 
     public Ring remove() {
-        current = current.remove();
+        try {
+            Callable<Link> f = stack.pop();
+            current = f.call();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         return this;
+
     }
 }
