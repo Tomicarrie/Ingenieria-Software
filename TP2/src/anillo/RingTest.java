@@ -106,4 +106,19 @@ public class RingTest {
                                                  .remove()
                                                  .current() );
     }
+
+    // agregamos Tests
+    @Test void test14RemoveEmptyRing() {
+        assertThrows( Exception.class, () -> new Ring().remove());
+    }
+
+    @Test void test15AddOnceRemoveTwice() {
+        assertThrows( Exception.class, () -> new Ring().add( "Hola").remove().remove());
+        try {
+            new Ring().add( "Hola" ).remove().remove();
+        }
+        catch ( Exception e ) {
+            assertEquals("No se puede remover de un anillo vacio", e.getMessage());
+        }
+    }
 }

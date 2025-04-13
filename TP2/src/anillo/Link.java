@@ -8,9 +8,8 @@ public abstract class Link {
     private Link next_link;
     private Link prev_link;
 
-    public Object getCargo() {
-        return cargo;
-    }
+    // accessors
+    public Object getCargo() {return cargo;}
     public Link getNext_link() {
         return next_link;
     }
@@ -18,6 +17,7 @@ public abstract class Link {
         return prev_link;
     }
 
+    //setters
     public void setCargo(Object cargo) {
         this.cargo = cargo;
     }
@@ -28,41 +28,41 @@ public abstract class Link {
         this.prev_link = prev_link;
     }
 
+
     public void assignNextAndPrev( Link link, Link nextLink, Link prevLink) {
         link.setNext_link(nextLink);
         link.setPrev_link(prevLink);
-
     }
 
     public abstract Link next();
-    public abstract Link add( Object cargo, Stack<Function<Link, Link>> stack);
+    public abstract Link add( Object cargo);
     public abstract Object current();
     public abstract Link remove();
+    public abstract Link logForRemove(Link link);
 }
 
 class nullLink extends Link {
 
-    private Object cargo = null;
-    private Link next_link = null;
-    private Link prev_link = null;
-
     public Link next() {
-        throw new RuntimeException();
+        throw new RuntimeException("No se puede obtener el siguiente de un anillo vacio");
     }
 
     public Object current() {
-        throw new RuntimeException();
+        throw new RuntimeException( "No se puede extraer el current de un anillo vacio");
     }
 
     public Link remove() {
-        return new nullLink();
+        throw new RuntimeException("No se puede remover de un anillo vacio");
     }
 
-    public Link add( Object cargo, Stack<Function<Link, Link>> stack) {
+    public Link add( Object cargo) {
         cargoLink newLink = new cargoLink(cargo);
         assignNextAndPrev(newLink, newLink, newLink);
-        stack.push((link) -> new nullLink());
         return newLink;
+    }
+
+    public Link logForRemove(Link link) {
+        return this;
     }
 }
 
@@ -74,15 +74,13 @@ class cargoLink extends Link {
         setPrev_link(null);
     }
 
-    public Link add(Object cargo, Stack<Function<Link, Link>> stack) {
+    public Link add(Object cargo) {
 
         cargoLink newLink = new cargoLink(cargo);
         assignNextAndPrev(newLink, this, this.getPrev_link());
 
         getPrev_link().setNext_link(newLink);
         setPrev_link(newLink);
-
-        stack.push((Link link) -> link.remove());
 
         return newLink;
     }
@@ -99,5 +97,9 @@ class cargoLink extends Link {
 
     public Object current() {
         return getCargo();
+    }
+
+    public Link logForRemove(Link link) {
+        return link.remove();
     }
 }

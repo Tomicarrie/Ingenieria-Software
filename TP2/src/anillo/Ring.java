@@ -4,14 +4,14 @@ import java.util.Stack;
 import java.util.function.Function;
 
 public class Ring {
-    public Link current;
-    public Stack<Function<Link, Link>> stack;
+
+    private Link current;
+    private Stack<Function<Link, Link>> stackForRemoves;
 
     public Ring() {
-        current = new nullLink();
-        stack = new Stack<>();
-        stack.push((link) -> link.remove());
-
+        current =  new nullLink();
+        stackForRemoves = new Stack<>();
+        stackForRemoves.push(link -> current.remove());
     }
 
     public Ring next() {
@@ -24,16 +24,15 @@ public class Ring {
     }
 
     public Ring add( Object cargo ) {
-        current = current.add(cargo, stack);
+        Link prev_current = current;
+        stackForRemoves.push((Link link) -> prev_current.logForRemove(link));
+        current = current.add(cargo);
         return this;
-
     }
 
     public Ring remove() {
-
-        Function<Link, Link> f = stack.pop();
-        current = f.apply(current);
-
+        Function<Link, Link> removeFunction = stackForRemoves.pop();
+        current = removeFunction.apply(current);
         return this;
     }
 }
