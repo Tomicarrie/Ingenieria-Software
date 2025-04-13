@@ -1,11 +1,6 @@
 
 package anillo;
-
-import org.junit.jupiter.api.function.Executable;
-import org.junit.platform.engine.support.hierarchical.Node;
-
 import java.util.Stack;
-import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 public class Ring {

@@ -1,7 +1,6 @@
 package anillo;
 
 import java.util.Stack;
-import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 public abstract class Link {
