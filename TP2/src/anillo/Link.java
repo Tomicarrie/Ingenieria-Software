@@ -35,7 +35,7 @@ public abstract class Link {
     }
 
     public abstract Link next();
-    public abstract Link add( Object cargo, Stack<Function<Link, Link>> stack, Ring ring);
+    public abstract Link add( Object cargo, Stack<Function<Link, Link>> stack);
     public abstract Object current();
     public abstract Link remove();
 }
@@ -58,7 +58,7 @@ class nullLink extends Link {
         return new nullLink();
     }
 
-    public Link add( Object cargo, Stack<Function<Link, Link>> stack, Ring ring) {
+    public Link add( Object cargo, Stack<Function<Link, Link>> stack) {
         cargoLink newLink = new cargoLink(cargo);
         assignNextAndPrev(newLink, newLink, newLink);
         stack.push((link) -> new nullLink());
@@ -74,7 +74,7 @@ class cargoLink extends Link {
         setPrev_link(null);
     }
 
-    public Link add(Object cargo, Stack<Function<Link, Link>> stack, Ring ring) {
+    public Link add(Object cargo, Stack<Function<Link, Link>> stack) {
 
         cargoLink newLink = new cargoLink(cargo);
         assignNextAndPrev(newLink, this, this.getPrev_link());

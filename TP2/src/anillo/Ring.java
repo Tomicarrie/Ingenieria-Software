@@ -24,7 +24,7 @@ public class Ring {
     }
 
     public Ring add( Object cargo ) {
-        current = current.add(cargo, stack, this);
+        current = current.add(cargo, stack);
         return this;
 
     }
