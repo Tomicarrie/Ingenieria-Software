@@ -2,6 +2,7 @@ package anillo;
 
 import java.util.Stack;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 public abstract class Link {
     private Object cargo;
@@ -35,7 +36,7 @@ public abstract class Link {
     }
 
     public abstract Link next();
-    public abstract Link add( Object cargo, Stack<Callable<Link>> stack, Ring ring);
+    public abstract Link add( Object cargo, Stack<Function<Link, Link>> stack, Ring ring);
     public abstract Object current();
     public abstract Link remove();
 }
@@ -55,13 +56,13 @@ class nullLink extends Link {
     }
 
     public Link remove() {
-        throw new RuntimeException();
+        return new nullLink();
     }
 
-    public Link add( Object cargo, Stack<Callable<Link>> stack, Ring ring) {
+    public Link add( Object cargo, Stack<Function<Link, Link>> stack, Ring ring) {
         cargoLink newLink = new cargoLink(cargo);
         assignNextAndPrev(newLink, newLink, newLink);
-        stack.push(() -> new nullLink());
+        stack.push((link) -> new nullLink());
         return newLink;
     }
 }
@@ -74,7 +75,7 @@ class cargoLink extends Link {
         setPrev_link(null);
     }
 
-    public Link add( Object cargo, Stack<Callable<Link>> stack, Ring ring) {
+    public Link add(Object cargo, Stack<Function<Link, Link>> stack, Ring ring) {
 
         cargoLink newLink = new cargoLink(cargo);
         assignNextAndPrev(newLink, this, this.getPrev_link());
@@ -82,7 +83,7 @@ class cargoLink extends Link {
         getPrev_link().setNext_link(newLink);
         setPrev_link(newLink);
 
-        stack.push(() -> ring.current.remove());
+        stack.push((Link link) -> link.remove());
 
         return newLink;
     }

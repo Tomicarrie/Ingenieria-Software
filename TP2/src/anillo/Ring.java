@@ -2,18 +2,21 @@
 package anillo;
 
 import org.junit.jupiter.api.function.Executable;
+import org.junit.platform.engine.support.hierarchical.Node;
 
 import java.util.Stack;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 public class Ring {
     public Link current;
-    public Stack<Callable<Link>>stack;
+    public Stack<Function<Link, Link>> stack;
 
     public Ring() {
         current = new nullLink();
         stack = new Stack<>();
-        stack.push(() -> current.remove());
+        stack.push((link) -> link.remove());
+
     }
 
     public Ring next() {
@@ -32,12 +35,9 @@ public class Ring {
     }
 
     public Ring remove() {
-        try {
-            Callable<Link> f = stack.pop();
-            current = f.call();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        Function<Link, Link> f = stack.pop();
+        current = f.apply(current);
 
         return this;
     }
