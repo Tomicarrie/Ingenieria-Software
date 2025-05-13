@@ -78,7 +78,6 @@ class cargoLink extends Link {
 
         cargoLink newLink = new cargoLink(cargo);
         assignNextAndPrev(newLink, this, this.getPrev_link());
-
         getPrev_link().setNext_link(newLink);
         setPrev_link(newLink);
 
