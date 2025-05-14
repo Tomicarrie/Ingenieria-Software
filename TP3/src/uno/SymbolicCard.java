@@ -15,12 +15,8 @@ public abstract class SymbolicCard extends ColoredCard {
     }
     
     public boolean accepts(Card aCard) {
-
-        boolean isSameColor = aCard.colorIsValid(this);
-        if (aCard.type.equals(type)) {
-            return aCard.getSymbol().equals(symbol) || isSameColor;
-        }
-        return isSameColor;
-
+        return aCard.acceptsColor(this) || aCard.acceptsSymbol(this);
     }
+    public boolean acceptsSymbol(SymbolicCard aCard) {return symbol.equals(aCard.getSymbol());}
+    public boolean acceptsNumber(NumberedCard aCard) {return false;}
 }

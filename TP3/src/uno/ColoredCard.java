@@ -28,5 +28,6 @@ public abstract class ColoredCard extends Card {
         return false;
     }
     public abstract boolean accepts(Card aCard);
+    public boolean acceptsColor(ColoredCard aCard) {return color.equals(aCard.getColor());}
     
 }

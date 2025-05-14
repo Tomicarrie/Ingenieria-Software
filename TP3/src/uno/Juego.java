@@ -42,6 +42,14 @@ public class Juego {
         return pit;
     }
 
+    public Juego agarrar(String nombre, int numero){
+        if (!jugadorActual.isPlayer(nombre)) {
+            throw new RuntimeException("No es el turno del jugador");
+        }
+        jugadorActual.agarrar(mazo.removeFirst());
+        return this;
+    }
+
     public Juego repartir() {
         int cantidadCartas = this.cartasARepartir;
         while (cantidadCartas > 0) {
@@ -59,9 +67,6 @@ public class Juego {
     public void invertirDireccion() {
         direccion *= -1;
     }
-
-
-
 
 
 }

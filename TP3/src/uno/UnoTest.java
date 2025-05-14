@@ -25,7 +25,6 @@ public class UnoTest {
         mazoSimple.add(new NumberedCard("azul", 5));
         mazoSimple.add(new NumberedCard("amarillo", 4));
 
-
         jugadores = new ArrayList<>();
         jugadores.add("tomas");
         jugadores.add("delfina");
@@ -87,4 +86,16 @@ public class UnoTest {
         assertEquals(exceptionMessage,
                 assertThrows(Exception.class, executable).getMessage());
     }
+
+    /*
+    * Funcionalidad de las cartas
+    * Tests
+    * Sacar el If de la direccion
+    * Como cantar uno
+    * Consultar el double dispatch
+    * Terminar juego
+    * Se puede cuando se crea el jugador, decirle cuantas cartas agarrar y pasarle el mazo al crearlo.
+    * Temas de checkeo de la cantidad de cartas a repartir menor a las cartas en el mazo y esas cosas.
+    * Como repartir.
+    */
 }

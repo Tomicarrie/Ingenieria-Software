@@ -6,9 +6,11 @@ public class WildCard extends Card {
         return true;
     }
 
-    public boolean colorIsValid(ColoredCard aCard) {
+    public boolean acceptsColor(ColoredCard aCard) {
         return true;
     }
+    public boolean acceptsSymbol(SymbolicCard aCard) {return false;}
+    public boolean acceptsNumber(NumberedCard aCard) {return false;}
 
     public String getColor() {
         throw new RuntimeException("Wildcard no tiene un colo asignado todavia");

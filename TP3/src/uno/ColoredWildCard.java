@@ -1,7 +1,6 @@
 package uno;
 
 public class ColoredWildCard extends ColoredCard {
-    public String type = "Colored Wild";
     public ColoredWildCard(String color) {
         super();
         this.color = color;
@@ -9,11 +8,9 @@ public class ColoredWildCard extends ColoredCard {
     }
 
     public boolean accepts(Card aCard) {
-        return aCard.colorIsValid(this);
+        return aCard.acceptsColor(this);
     }
 
-
-    public boolean colorIsValid(ColoredCard aCard) {
-        return color.equals(aCard.color);
-    }
+    public boolean acceptsSymbol(SymbolicCard aCard) {return false;}
+    public boolean acceptsNumber(NumberedCard aCard) {return false;}
 }
