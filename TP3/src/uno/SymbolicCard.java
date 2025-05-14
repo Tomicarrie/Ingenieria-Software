@@ -1,5 +1,6 @@
 package uno;
-public abstract class SymbolicCard extends Card {
+
+public abstract class SymbolicCard extends ColoredCard {
     protected String symbol;
     
     public SymbolicCard(String color, String symbol) {
@@ -13,9 +14,9 @@ public abstract class SymbolicCard extends Card {
         return symbol;
     }
     
-    public boolean isValid(Card aCard) {
+    public boolean accepts(Card aCard) {
 
-        boolean isSameColor = colorIsValid(aCard);
+        boolean isSameColor = aCard.colorIsValid(this);
         if (aCard.type.equals(type)) {
             return aCard.getSymbol().equals(symbol) || isSameColor;
         }

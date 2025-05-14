@@ -1,12 +1,24 @@
 package uno;
+
 public class WildCard extends Card {
     public String type = "Wild";
-    
-    public void setColor(String color) {
-        this.color = color;
+    public boolean accepts(Card aCard) {
+        return true;
     }
-    
-    public boolean isValid(Card aCard) {
-        return colorIsValid(aCard);
+
+    public boolean colorIsValid(ColoredCard aCard) {
+        return true;
     }
+
+    public String getColor() {
+        throw new RuntimeException("Wildcard no tiene un colo asignado todavia");
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        return true;
+    }
+
 }
+

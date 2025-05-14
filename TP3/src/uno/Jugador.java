@@ -1,4 +1,5 @@
 package uno;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,10 @@ public class Jugador {
         this.nextPlayer = nextPlayer;
         this.previousPlayer = previousPlayer;
 
+    }
+
+    public boolean isPlayer(String nombre) {
+        return this.nombre.equals(nombre);
     }
 
 
@@ -56,22 +61,20 @@ public class Jugador {
         return this;
     }
 
-
-
-
     public List<Card> getCards() {
         return cards;
     }
 
-    public Card tirar(Card aCard) {
+    public void tirar(Card aCard) {
         if (!cards.remove(aCard)) {
             throw new RuntimeException("El jugador no tiene esta carta");
         }
-        return aCard;
     }
 
     public void agarrar(Card aCard) {
         cards.add(aCard);
     }
+
+    // FALTA CANTAR UNO
 
 }

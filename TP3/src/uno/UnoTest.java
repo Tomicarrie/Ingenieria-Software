@@ -2,6 +2,7 @@ package uno;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,74 +11,80 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UnoTest {
-    public List<Card> mazo;
+    public List<Card> mazoSimple;
     public List<String> jugadores;
+
     @BeforeEach
     public void setUp() {
-        mazo = new ArrayList<>();
-        mazo.add(new NumberedCard("rojo", 12));
-        mazo.add(new NumberedCard("verde", 13));
+        mazoSimple = new ArrayList<>();
+        mazoSimple.add(new NumberedCard("rojo", 2));
+        mazoSimple.add(new NumberedCard("verde", 2));
+        mazoSimple.add(new NumberedCard("verde", 4));
+        mazoSimple.add(new NumberedCard("azul", 5));
+        mazoSimple.add(new NumberedCard("verde", 4));
+        mazoSimple.add(new NumberedCard("azul", 5));
+        mazoSimple.add(new NumberedCard("amarillo", 4));
+
 
         jugadores = new ArrayList<>();
         jugadores.add("tomas");
-        jugadores.add("julio");
+        jugadores.add("delfina");
         jugadores.add("emilio");
     }
 
-    @Test public void testPitVacio() {
-        assertThrows(NoSuchElementException.class, () -> new Juego(new ArrayList<>(), 0, new ArrayList<>()));
+    @Test
+    public void testPitVacio() {
+        assertThrows(NoSuchElementException.class, () -> new Juego(new ArrayList<>(), 0, jugadores).pit());
     }
 
-    @Test public void testPitEsPrimerCarta() {
-        assertEquals(new NumberedCard("rojo", 12),  new Juego(mazo, 0, jugadores).pit());
+    @Test
+    public void testPitInicial() {
+        assertEquals(new NumberedCard("rojo", 2), new Juego(mazoSimple, 0, jugadores).pit());
     }
 
-    @Test public void testPitEsLaQueTiraElJugador() {
-        // assertEquals(new NumberedCard("verde", 13),  new Juego(mazo, 2, jugadores).repartir().tirar());
+    @Test
+    public void testTirarUnaCartaValida() {
+        assertEquals(new NumberedCard("verde", 2),
+                new Juego(mazoSimple, 1, jugadores)
+                        .repartir().tirar("tomas", new NumberedCard("verde", 2)).pit());
 
     }
 
-
-
-    /*
-    @Test public void test1() {
-
-        Card carta1 = new NumberedCard("rojo", 12);
-        Card carta2 = new NumberedCard("verde", 12);
-        Card carta3 = new NumberedCard("rojo", 10);
-
-        assertTrue(carta1.isValid(carta2));
-        assertTrue(carta1.isValid(carta3));
-        assertFalse(carta2.isValid(carta3));
-
-        Card carta4 = new DrawTwoCard("rojo");
-        Card carta5 = new DrawTwoCard("verde");
-        Card carta6 = new ReverseCard("azul");
-
-        assertTrue(carta4.isValid(carta3));
-        assertTrue(carta4.isValid(carta5));
-        assertFalse(carta4.isValid(carta2));
-        assertFalse(carta6.isValid(carta5));
+    @Test public void testJugadorSinCarta() {
+        assertThrowsLike("El jugador no tiene esta carta", () -> new Juego(mazoSimple, 1, jugadores)
+                .repartir().tirar("tomas", new NumberedCard("rojo", 4)));
     }
 
-    @Test public void test2() {
-
-        Card carta1 = new NumberedCard("rojo", 12);
-        Card carta2 = new NumberedCard("verde", 12);
-        Card carta3 = new NumberedCard("rojo", 10);
-
-        List<Card> cards = new ArrayList<Card>();
-        cards.add(carta1);
-        cards.add(carta2);
-        cards.add(carta3);
-
-        Jugador jugador = new Jugador(cards, "tomas");
-        assertEquals(carta1, jugador.tirar(new NumberedCard("rojo", 12)));
-        assertEquals(2, jugador.getCards().size());
-
-        assertThrows(RuntimeException.class, () -> jugador.tirar(new NumberedCard("verde", 10)));
-
+    @Test public void testTurnoEquivocado() {
+        assertThrowsLike("No es el turno del jugador", () -> new Juego(mazoSimple, 1, jugadores)
+                .repartir().tirar("delfina", new NumberedCard("verde", 4)));
     }
-    */
 
+    @Test public void testTirarDosCartas() {
+        assertEquals(new NumberedCard("verde", 4),
+                new Juego(mazoSimple, 1, jugadores)
+                        .repartir().tirar("tomas", new NumberedCard("verde", 2))
+                        .tirar("delfina", new NumberedCard("verde", 4)).pit());
+    }
+
+
+    @Test public void testTirarCartaInvalida() {
+        assertThrowsLike("No es una carta valida",
+                () -> new Juego(mazoSimple, 2, jugadores)
+                        .repartir().tirar("tomas", new NumberedCard("verde", 4)));
+    }
+
+    @Test public void testJugadorGana() { // QUE HACER CUANDO UN JUGDOR GANA?? TIRAR ERROR SI SE QUIERE SEGUIR JUGANDO? NUEVA CLASE DE JUEGO TERMINADO QUE TIRE EXCEPCIONES?
+        assertEquals(new NumberedCard("verde", 4), new Juego(mazoSimple, 2, jugadores)
+                        .repartir().tirar("tomas", new NumberedCard("verde", 2))
+                        .tirar("delfina", new NumberedCard("verde", 4))
+                        .tirar("emilio", new NumberedCard("amarillo", 4))
+                        .tirar("tomas", new NumberedCard("verde", 4)).pit());
+    }
+
+
+    private void assertThrowsLike(String exceptionMessage, Executable executable) {
+        assertEquals(exceptionMessage,
+                assertThrows(Exception.class, executable).getMessage());
+    }
 }

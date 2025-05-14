@@ -1,6 +1,6 @@
 package uno;
 
-public class NumberedCard extends Card {
+public class NumberedCard extends ColoredCard {
     private int number;
 
     public NumberedCard(String color, int number) {
@@ -12,14 +12,19 @@ public class NumberedCard extends Card {
     public int getNumber() {
         return number;
     }
-    public boolean isValid(Card aCard) {
-        
-        boolean isSameColor = colorIsValid(aCard);
+    public boolean accepts(Card aCard) {
+
+        boolean isSameColor = aCard.colorIsValid(this);
+
         if (aCard.type.equals(type)) {
             return aCard.getNumber() == number || isSameColor;
         }
-        return isSameColor;
 
+        return isSameColor;
     }
+
+
+
+
 
 }
