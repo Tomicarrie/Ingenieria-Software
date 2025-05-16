@@ -22,5 +22,11 @@ public class WildCard extends Card {
         return true;
     }
 
-}
+    public void actionOn(Juego juego) {
+        return;
+    }
 
+    public ColoredCard asignarColor(String color) {
+        return new ColoredWildCard(color);
+    }
+}

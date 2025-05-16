@@ -4,7 +4,7 @@ public class ColoredWildCard extends ColoredCard {
     public ColoredWildCard(String color) {
         super();
         this.color = color;
-        
+
     }
 
     public boolean accepts(Card aCard) {
@@ -13,4 +13,8 @@ public class ColoredWildCard extends ColoredCard {
 
     public boolean acceptsSymbol(SymbolicCard aCard) {return false;}
     public boolean acceptsNumber(NumberedCard aCard) {return false;}
+
+    public void actionOn(Juego juego) {
+        return;
+    }
 }

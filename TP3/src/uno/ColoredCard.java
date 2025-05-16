@@ -6,11 +6,11 @@ public abstract class ColoredCard extends Card {
     public String getColor() {
         return color;
     }
-    
+
     public boolean colorIsValid(ColoredCard aCard) {
         return aCard.getColor().equals(color);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -22,12 +22,13 @@ public abstract class ColoredCard extends Card {
 
         if (this instanceof NumberedCard && aCard instanceof NumberedCard) {
             return this.getNumber() == aCard.getNumber();
-        } else if (this instanceof SymbolicCard && aCard instanceof SymbolicCard) {
+        } else if (this.getClass().getSuperclass().equals(SymbolicCard.class) && aCard.getClass().getSuperclass().equals(SymbolicCard.class)) {
             return this.getSymbol().equals(aCard.getSymbol());
         }
         return false;
     }
     public abstract boolean accepts(Card aCard);
     public boolean acceptsColor(ColoredCard aCard) {return color.equals(aCard.getColor());}
-    
+    public abstract void actionOn(Juego juego);
+
 }

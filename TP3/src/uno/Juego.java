@@ -14,38 +14,60 @@ public class Juego {
 
     public Juego(List<Card> mazoInicial, int cartasPorJugador, List<String> jugadores) {
 
-        this.pit = mazoInicial.removeFirst();
-        this.mazo = mazoInicial;
+        this.mazo = new ArrayList<>(mazoInicial);
+        this.pit = this.mazo.removeFirst();
         this.cartasARepartir = cartasPorJugador * jugadores.size();
-        jugadorActual = new Jugador(jugadores.removeFirst());
-        jugadores.forEach(jugador -> {jugadorActual.addNextPlayer(jugador);});
 
+        List<String> copiaJugadores = new ArrayList<>(jugadores);
+        jugadorActual = new Jugador(copiaJugadores.removeFirst());
+        copiaJugadores.forEach(jugador -> {jugadorActual.addNextPlayer(jugador);});
     }
 
-    public Juego tirar(String nombre, Card card) {
+    public Jugador getJugadorActual() {return jugadorActual;}
+
+    public Juego tirar(String nombre, ColoredCard card) {
 
         if (!jugadorActual.isPlayer(nombre)) {
             throw new RuntimeException("No es el turno del jugador");
         }
-        if (!card.accepts(pit)) {
-            throw new RuntimeException("No es una carta valida");
+
+        if (card.getClass().equals(ColoredWildCard.class)) {
+            jugadorActual.tirar(new WildCard());
+        } else {
+            if (!card.accepts(pit)) {
+                throw new RuntimeException("No es una carta valida");
+            }
+            jugadorActual.tirar(card);
         }
 
-        jugadorActual.tirar(card);
+        if ((jugadorActual.getCards().size() == 1) && !jugadorActual.cantoUno() ){
+            String nombreActual = jugadorActual.getNombre();
+            this.agarrar(nombreActual);
+            this.agarrar(nombreActual);
+        }
+
         this.pit = card;
-        jugadorActual = jugadorActual.getNextPlayer(this.direccion);
+        this.pit.actionOn(this);
+        avanzarTurno();
         return this;
 
+    }
+
+    public Juego tirarYCantarUno(String nombre, ColoredCard card) {
+        jugadorActual.cantarUno();
+        this.tirar(nombre, card);
+        return this;
     }
 
     public Card pit() {
         return pit;
     }
 
-    public Juego agarrar(String nombre, int numero){
+    public Juego agarrar(String nombre){
         if (!jugadorActual.isPlayer(nombre)) {
             throw new RuntimeException("No es el turno del jugador");
         }
+        jugadorActual.anularUno();
         jugadorActual.agarrar(mazo.removeFirst());
         return this;
     }
@@ -67,6 +89,23 @@ public class Juego {
     public void invertirDireccion() {
         direccion *= -1;
     }
+
+    public void comportamientoReverse() {
+        invertirDireccion();
+    }
+
+    public void comportamientoDrawTwo() {
+        avanzarTurno();
+        jugadorActual.agarrar(mazo.removeFirst());
+        jugadorActual.agarrar(mazo.removeFirst());
+    }
+
+    public void comportamientoSkip() {
+        avanzarTurno();
+    }
+
+
+
 
 
 }

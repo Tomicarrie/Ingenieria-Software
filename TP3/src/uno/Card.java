@@ -25,6 +25,7 @@ public abstract class Card {
 
     public abstract String getColor();
 
-}
+    public abstract void actionOn(Juego juego);
 
+}
 
