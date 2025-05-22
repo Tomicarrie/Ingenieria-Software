@@ -8,7 +8,7 @@ public class Juego {
     private List<Card> mazo = new ArrayList<Card>();
     private Jugador jugadorActual;
     private Card pit;
-    private int direccion = 1;
+    private Controlador direccion;
     private int cartasARepartir;
 
 
@@ -21,6 +21,7 @@ public class Juego {
         List<String> copiaJugadores = new ArrayList<>(jugadores);
         jugadorActual = new Jugador(copiaJugadores.removeFirst());
         copiaJugadores.forEach(jugador -> {jugadorActual.addNextPlayer(jugador);});
+        this.direccion = new controladorDerecha();
     }
 
     public Jugador getJugadorActual() {return jugadorActual;}
@@ -77,17 +78,17 @@ public class Juego {
         while (cantidadCartas > 0) {
             cantidadCartas--;
             jugadorActual.agarrar(mazo.removeFirst());
-            jugadorActual = jugadorActual.getNextPlayer(this.direccion);
+            avanzarTurno();
         }
         return this;
     }
 
     public void avanzarTurno() {
-        jugadorActual = jugadorActual.getNextPlayer(this.direccion);
+        jugadorActual = direccion.getNextPlayer(jugadorActual);
     }
 
     public void invertirDireccion() {
-        direccion *= -1;
+        this.direccion = this.direccion.changeControlador();
     }
 
     public void comportamientoReverse() {
@@ -103,9 +104,5 @@ public class Juego {
     public void comportamientoSkip() {
         avanzarTurno();
     }
-
-
-
-
 
 }

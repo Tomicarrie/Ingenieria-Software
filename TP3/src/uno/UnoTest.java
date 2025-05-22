@@ -16,7 +16,6 @@ public class UnoTest {
     public List<Card> mazoComplejo;
     public List<String> jugadores;
 
-
     @BeforeEach
     public void setUp() {
         mazoSimple = new ArrayList<>(List.of(
@@ -47,7 +46,6 @@ public class UnoTest {
                 new NumberedCard("amarillo", 4)
         ));
         jugadores = new ArrayList<>(List.of("tomas", "delfina", "emilio"));
-
         mazoComplejo = new ArrayList<>(List.of(
                 new NumberedCard("amarillo", 3),
                 new SkipCard("amarillo"),
@@ -69,7 +67,6 @@ public class UnoTest {
                 new NumberedCard("rojo", 8)
 
         ));
-
         // chequear: funcionalidad, apoyar un mismo simbolo es valido
     }
 
@@ -171,8 +168,6 @@ public class UnoTest {
 
     /*
      * Tests
-     * Sacar el If de la direccion
-     * Como cantar uno
      * Terminar juego
      * Temas de checkeo de la cantidad de cartas a repartir menor a las cartas en el mazo y esas cosas.
      */

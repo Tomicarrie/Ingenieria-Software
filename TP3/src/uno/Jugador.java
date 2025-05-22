@@ -52,11 +52,8 @@ public class Jugador {
         return previousPlayer;
     }
 
-    public Jugador getNextPlayer(int direccion) {
-        if (direccion == 1) {
-            return nextPlayer;
-        }
-        return previousPlayer;
+    public Jugador getNextPlayer() {
+        return nextPlayer;
     }
 
     public Jugador addNextPlayer(String nombre) {
