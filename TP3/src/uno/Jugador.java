@@ -23,9 +23,6 @@ public class Jugador {
 
     public boolean cantoUno() { return this.uno; }
 
-
-
-
     public Jugador(String nombre) {
         this.cards = new ArrayList<>();
         this.nombre = nombre;

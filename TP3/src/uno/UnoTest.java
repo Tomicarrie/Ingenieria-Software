@@ -56,7 +56,7 @@ public class UnoTest {
                 new ReverseCard("rojo"),
                 new WildCard(),
                 new NumberedCard("rojo", 5),
-                new NumberedCard("amarillo", 2),
+                new WildCard(),
                 new ReverseCard("amarillo"),
                 new NumberedCard("amarillo", 5),
                 new NumberedCard("rojo", 4),
@@ -102,13 +102,14 @@ public class UnoTest {
 
     @Test void testObtenerGanador() {
         assertEquals("tomas", new JuegoEnCurso(mazoSimple, 1, jugadores)
-                        .tirar("tomas", new NumberedCard("verde", 2)).getGanador());
+                                                .tirar("tomas", new NumberedCard("verde", 2)).getGanador());
 
     }
 
     @Test public void testAvanzarTurno() {
         assertEquals("delfina", new JuegoEnCurso(mazoSimple, 2, jugadores)
-                .tirar("tomas", new NumberedCard("verde", 2)).getJugadorActual().getNombre());
+                                                .tirar("tomas", new NumberedCard("verde", 2))
+                                                .getJugadorActual().getNombre());
     }
 
     @Test public void testJugadorSinCarta() {
@@ -147,20 +148,25 @@ public class UnoTest {
 
     @Test public void testWildCard() {
         Juego juego = new JuegoEnCurso(mazoComplejo, 4, jugadores).tirar("tomas", new WildCard().asignarColor("rojo"));
+
         assertEquals("delfina", juego.getJugadorActual().getNombre());
         assertEquals("rojo", juego.pit().getColor());
         assertThrowsLike("No es una carta valida", () -> {juego.tirar("delfina", new NumberedCard("azul", 2));});
         assertEquals("delfina", juego.getJugadorActual().getNombre());
         assertEquals(new NumberedCard("rojo", 5), juego.tirar("delfina", new NumberedCard("rojo", 5)).pit());
-
+        assertEquals("amarillo", juego.tirar("emilio", new WildCard().asignarColor("amarillo")).pit().getColor());
     }
 
     @Test public void testSkipCard() {
-        assertEquals("emilio",new JuegoEnCurso(mazoComplejo, 4, jugadores).tirar("tomas", new SkipCard("amarillo")).getJugadorActual().getNombre());
+        assertEquals("emilio",new JuegoEnCurso(mazoComplejo, 4, jugadores)
+                                        .tirar("tomas", new SkipCard("amarillo"))
+                                        .getJugadorActual().getNombre());
     }
 
     @Test public void testReverseCard() {
-        Juego juego =  new JuegoEnCurso(mazoComplejo, 4, jugadores).tirar("tomas", new ReverseCard("amarillo"));
+        Juego juego =  new JuegoEnCurso(mazoComplejo, 4, jugadores)
+                        .tirar("tomas", new ReverseCard("amarillo"));
+
         assertEquals("emilio", juego.getJugadorActual().getNombre());
         juego.tirar("emilio", new ReverseCard("rojo"));
         assertEquals("tomas", juego.getJugadorActual().getNombre());
@@ -181,9 +187,18 @@ public class UnoTest {
 
     @Test public void testCantarUno() {
 
-        Juego juego =  new JuegoEnCurso(mazoChico, 2, jugadores).tirarYCantarUno("tomas", new ReverseCard("rojo"))
-                .tirar("emilio", new ReverseCard("rojo"));
+        Juego juego =  new JuegoEnCurso(mazoChico, 2, jugadores)
+                        .tirarYCantarUno("tomas", new ReverseCard("rojo"))
+                        .tirar("emilio", new ReverseCard("rojo"));
+
         assertTrue(juego.getJugadorActual().cantoUno());
+    }
+
+    @Test public void testFalsoCantarUno() {
+
+        Juego juego =  new JuegoEnCurso(mazoChico, 3, jugadores).tirarYCantarUno("tomas", new ReverseCard("rojo"))
+                .tirar("emilio", new ReverseCard("rojo"));
+        assertFalse(juego.getJugadorActual().cantoUno());
     }
 
     @Test
@@ -192,6 +207,5 @@ public class UnoTest {
                                                                         .tirar("tomas", new NumberedCard("verde", 2))
                                                                         .tirar("delfina", new NumberedCard("verde", 4)));
     }
-
 
 }

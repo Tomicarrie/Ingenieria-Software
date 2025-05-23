@@ -18,8 +18,11 @@ public abstract class ColoredCard extends Card {
 
         ColoredCard aCard = (ColoredCard) obj;
 
-        if (!this.color.equals(aCard.color)) return false;
+        if (!this.color.equals(aCard.color)) return false; // si no coincide el color descarto
 
+        if (this instanceof ColoredWildCard && aCard instanceof ColoredWildCard) {
+            return true;
+        }
         if (this instanceof NumberedCard && aCard instanceof NumberedCard) {
             return this.getNumber() == aCard.getNumber();
         } else if (this.getClass().getSuperclass().equals(SymbolicCard.class) ) {
