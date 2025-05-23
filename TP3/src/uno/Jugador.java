@@ -83,6 +83,11 @@ public class Jugador {
     }
 
     public void tirar(Card aCard) {
+
+        if (aCard.getClass().equals(ColoredWildCard.class)) {
+            aCard = new WildCard();
+        }
+
         if (!cards.remove(aCard)) {
             throw new RuntimeException("El jugador no tiene esta carta");
         }

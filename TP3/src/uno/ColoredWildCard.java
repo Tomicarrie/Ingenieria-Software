@@ -8,7 +8,8 @@ public class ColoredWildCard extends ColoredCard {
     }
 
     public boolean accepts(Card aCard) {
-        return aCard.acceptsColor(this);
+        //return aCard.acceptsColor(this);
+        return true;
     }
 
     public boolean acceptsSymbol(SymbolicCard aCard) {return false;}

@@ -35,24 +35,24 @@ public class JuegoEnCurso extends Juego {
             throw new RuntimeException("No es el turno del jugador");
         }
 
-        if (card.getClass().equals(ColoredWildCard.class)) {
-            jugadorActual.tirar(new WildCard());
-        } else {
-            if (!card.accepts(pit)) {
-                throw new RuntimeException("No es una carta valida");
-            }
-            jugadorActual.tirar(card);
+        if (!card.accepts(pit)) {
+            throw new RuntimeException("No es una carta valida");
+        }
+        jugadorActual.tirar(card);
 
-            if (jugadorActual.getNumCards() == 0) {
-                return new JuegoTerminado(jugadorActual);
-            }
+        if (juegoTerminado()) {
+            return new JuegoTerminado(jugadorActual);
+
         }
 
+        /*
         if ((jugadorActual.getNumCards() == 1) && !jugadorActual.cantoUno() ){
             String nombreActual = jugadorActual.getNombre();
             this.agarrar(nombreActual);
             this.agarrar(nombreActual);
         }
+
+         */
 
         this.pit = card;
         this.pit.actionOn(this);
@@ -65,11 +65,15 @@ public class JuegoEnCurso extends Juego {
         jugadorActual.cantarUno();
         this.tirar(nombre, card);
 
-        if (jugadorActual.getNumCards() == 0) {
+        if (juegoTerminado()) {
             return new JuegoTerminado(jugadorActual);
         }
 
         return this;
+    }
+
+    private boolean juegoTerminado() {
+        return jugadorActual.getNumCards() == 0;
     }
 
     public Card pit() {

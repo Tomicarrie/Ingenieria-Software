@@ -55,7 +55,7 @@ public class UnoTest {
                 new NumberedCard("amarillo", 3),
                 new ReverseCard("rojo"),
                 new WildCard(),
-                new NumberedCard("amarillo", 5),
+                new NumberedCard("rojo", 5),
                 new NumberedCard("amarillo", 2),
                 new ReverseCard("amarillo"),
                 new NumberedCard("amarillo", 5),
@@ -67,7 +67,6 @@ public class UnoTest {
                 new NumberedCard("rojo", 8)
 
         ));
-        // chequear: funcionalidad, apoyar un mismo simbolo es valido
     }
 
     @Test
@@ -136,8 +135,9 @@ public class UnoTest {
                         .tirar("tomas", new NumberedCard("verde", 4)));
     }
 
-    @Test public void testJugadorGana() { // QUE HACER CUANDO UN JUGDOR GANA?? TIRAR ERROR SI SE QUIERE SEGUIR JUGANDO? NUEVA CLASE DE JUEGO TERMINADO QUE TIRE EXCEPCIONES?
-        assertEquals(new NumberedCard("verde", 4), new JuegoEnCurso(mazoSimple, 2, jugadores)
+    @Test public void testRondCompleta() {
+
+        assertEquals(new NumberedCard("verde", 4), new JuegoEnCurso(mazoSimple, 3, jugadores)
                 .tirar("tomas", new NumberedCard("verde", 2))
                 .tirar("delfina", new NumberedCard("verde", 4))
                 .tirar("emilio", new NumberedCard("amarillo", 4))
@@ -145,12 +145,13 @@ public class UnoTest {
     }
 
 
-
-
     @Test public void testWildCard() {
         Juego juego = new JuegoEnCurso(mazoComplejo, 4, jugadores).tirar("tomas", new WildCard().asignarColor("rojo"));
         assertEquals("delfina", juego.getJugadorActual().getNombre());
         assertEquals("rojo", juego.pit().getColor());
+        assertThrowsLike("No es una carta valida", () -> {juego.tirar("delfina", new NumberedCard("azul", 2));});
+        assertEquals("delfina", juego.getJugadorActual().getNombre());
+        assertEquals(new NumberedCard("rojo", 5), juego.tirar("delfina", new NumberedCard("rojo", 5)).pit());
 
     }
 
@@ -193,9 +194,4 @@ public class UnoTest {
     }
 
 
-    /*
-     * Tests
-     * Terminar juego
-     * Temas de checkeo de la cantidad de cartas a repartir menor a las cartas en el mazo y esas cosas.
-     */
 }

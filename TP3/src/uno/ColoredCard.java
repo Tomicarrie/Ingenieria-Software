@@ -22,7 +22,7 @@ public abstract class ColoredCard extends Card {
 
         if (this instanceof NumberedCard && aCard instanceof NumberedCard) {
             return this.getNumber() == aCard.getNumber();
-        } else if (this.getClass().getSuperclass().equals(SymbolicCard.class) && aCard.getClass().getSuperclass().equals(SymbolicCard.class)) {
+        } else if (this.getClass().getSuperclass().equals(SymbolicCard.class) ) {
             return this.getSymbol().equals(aCard.getSymbol());
         }
         return false;
