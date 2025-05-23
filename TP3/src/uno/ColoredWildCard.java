@@ -14,7 +14,7 @@ public class ColoredWildCard extends ColoredCard {
     public boolean acceptsSymbol(SymbolicCard aCard) {return false;}
     public boolean acceptsNumber(NumberedCard aCard) {return false;}
 
-    public void actionOn(Juego juego) {
+    public void actionOn(JuegoEnCurso juego) {
         return;
     }
 }

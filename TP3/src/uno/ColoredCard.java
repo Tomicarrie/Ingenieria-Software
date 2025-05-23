@@ -29,6 +29,6 @@ public abstract class ColoredCard extends Card {
     }
     public abstract boolean accepts(Card aCard);
     public boolean acceptsColor(ColoredCard aCard) {return color.equals(aCard.getColor());}
-    public abstract void actionOn(Juego juego);
+    public abstract void actionOn(JuegoEnCurso juego);
 
 }

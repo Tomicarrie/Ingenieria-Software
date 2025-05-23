@@ -78,6 +78,10 @@ public class Jugador {
         return cards;
     }
 
+    public int getNumCards() {
+        return cards.size();
+    }
+
     public void tirar(Card aCard) {
         if (!cards.remove(aCard)) {
             throw new RuntimeException("El jugador no tiene esta carta");
@@ -88,6 +92,9 @@ public class Jugador {
         cards.add(aCard);
     }
 
-    // FALTA CANTAR UNO
+    public String getName() {
+        return nombre;
+    }
+
 
 }

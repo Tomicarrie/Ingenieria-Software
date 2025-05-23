@@ -22,7 +22,7 @@ public class WildCard extends Card {
         return true;
     }
 
-    public void actionOn(Juego juego) {
+    public void actionOn(JuegoEnCurso juego) {
         return;
     }
 
