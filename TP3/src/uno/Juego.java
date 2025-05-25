@@ -82,6 +82,11 @@ public class Juego {
         if (!jugadorActual.isPlayer(nombre)) {
             throw new RuntimeException("No es el turno del jugador");
         }
+
+        if (terminado) {
+            throw new RuntimeException("El juego ya ha finalizado");
+        }
+
         jugadorActual.anularUno();
         jugadorActual.agarrar(mazo.removeFirst());
 

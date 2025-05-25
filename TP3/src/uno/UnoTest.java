@@ -224,4 +224,11 @@ public class UnoTest {
                                                                         .tirar("delfina", new NumberedCard(Verde, 4)));
     }
 
+    @Test public void testNoSePuedeAgarrarLuegoDeGanar() {
+        assertThrowsLike("El juego ya ha finalizado", () -> new Juego(mazoSimple, 1, jugadores)
+                                                        .tirar("tomas", new NumberedCard(Verde, 2))
+                                                        .agarrar("delfina"));
+    }
+
+
 }
