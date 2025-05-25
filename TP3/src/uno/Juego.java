@@ -43,22 +43,23 @@ public class Juego {
         }
         jugadorActual.tirar(card);
 
-        if (jugadorTermina()) {
-            terminado = true;
-        }
-
         /*
         if ((jugadorActual.getNumCards() == 1) && !jugadorActual.cantoUno() ){
             String nombreActual = jugadorActual.getNombre();
             this.agarrar(nombreActual);
             this.agarrar(nombreActual);
         }
-
          */
 
         this.pit = card;
-        this.pit.actionOn(this);
-        avanzarTurno();
+
+        if (jugadorTermina()) {
+            terminado = true;
+        } else {
+            this.pit.actionOn(this);
+            avanzarTurno();
+        }
+
         return this;
 
     }
@@ -78,13 +79,14 @@ public class Juego {
         return pit;
     }
 
-    public Juego agarrar(String nombre){
-        if (!jugadorActual.isPlayer(nombre)) {
-            throw new RuntimeException("No es el turno del jugador");
-        }
+    public Juego agarrar(String nombre) {
 
         if (terminado) {
             throw new RuntimeException("El juego ya ha finalizado");
+        }
+
+        if (!jugadorActual.isPlayer(nombre)) {
+            throw new RuntimeException("No es el turno del jugador");
         }
 
         jugadorActual.anularUno();
@@ -95,6 +97,7 @@ public class Juego {
     }
 
     private Juego repartir() {
+
         int cantidadCartas = this.cartasARepartir;
         if (this.cartasARepartir > mazo.size()) {
             throw new RuntimeException("No hay suficientes cartas en el mazo para repartir");
@@ -133,7 +136,4 @@ public class Juego {
     public boolean estaTerminado() {
         return terminado;
     }
-
-
-
 }

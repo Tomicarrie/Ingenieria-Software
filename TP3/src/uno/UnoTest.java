@@ -17,13 +17,10 @@ public class UnoTest {
     public static String Azul = "azul";
     public static String Rojo = "rojo";
 
-
     public List<Card> mazoSimple;
     public List<Card> mazoChico;
     public List<Card> mazoComplejo;
     public List<String> jugadores;
-
-
 
     @BeforeEach
     public void setUp() {
@@ -74,7 +71,6 @@ public class UnoTest {
                 new NumberedCard(Verde, 1),
                 new NumberedCard(Azul, 7),
                 new NumberedCard(Rojo, 8)
-
         ));
     }
 
@@ -103,12 +99,8 @@ public class UnoTest {
 
     @Test
     public void testJuegoFinalizado() {
-
-        assertTrue(new Juego(mazoSimple, 1, jugadores)
-                .tirar("tomas", new NumberedCard(Verde, 2)).estaTerminado());
-
+        assertTrue(getJuegoTerminado().estaTerminado());
     }
-
 
     @Test public void testAvanzarTurno() {
         assertEquals("delfina", new Juego(mazoSimple, 2, jugadores)
@@ -145,7 +137,6 @@ public class UnoTest {
                         .tirar("delfina", new NumberedCard(Verde, 4)).pit());
     }
 
-
     @Test public void testTirarCartaInvalida() {
         assertThrowsLike("No es una carta valida",
                 () -> new Juego(mazoSimple, 2, jugadores)
@@ -160,7 +151,6 @@ public class UnoTest {
                 .tirar("emilio", new NumberedCard(Amarillo, 4))
                 .tirar("tomas", new NumberedCard(Verde, 4)).pit());
     }
-
 
     @Test public void testWildCard() {
         Juego juego = new Juego(mazoComplejo, 4, jugadores)
@@ -195,14 +185,7 @@ public class UnoTest {
         juego.tirar("delfina", new DrawTwoCard(Amarillo)); // tira una que levanta del mazo
     }
 
-
-    private void assertThrowsLike(String exceptionMessage, Executable executable) {
-        assertEquals(exceptionMessage,
-                assertThrows(Exception.class, executable).getMessage());
-    }
-
     @Test public void testCantarUno() {
-
         Juego juego =  new Juego(mazoChico, 2, jugadores)
                         .tirarYCantarUno("tomas", new ReverseCard(Rojo))
                         .tirar("emilio", new ReverseCard(Rojo));
@@ -219,16 +202,21 @@ public class UnoTest {
 
     @Test
     public void testNoSePuedeTirarLuegoDeGanar() {
-        assertThrowsLike("El juego ya ha finalizado", () -> new Juego(mazoSimple, 1, jugadores)
-                                                                        .tirar("tomas", new NumberedCard(Verde, 2))
+        assertThrowsLike("El juego ya ha finalizado", () -> getJuegoTerminado()
                                                                         .tirar("delfina", new NumberedCard(Verde, 4)));
     }
 
     @Test public void testNoSePuedeAgarrarLuegoDeGanar() {
-        assertThrowsLike("El juego ya ha finalizado", () -> new Juego(mazoSimple, 1, jugadores)
-                                                        .tirar("tomas", new NumberedCard(Verde, 2))
-                                                        .agarrar("delfina"));
+        assertThrowsLike("El juego ya ha finalizado", () -> getJuegoTerminado().agarrar("tomas"));
     }
 
+    private void assertThrowsLike(String exceptionMessage, Executable executable) {
+        assertEquals(exceptionMessage,
+                assertThrows(Exception.class, executable).getMessage());
+    }
 
+    private Juego getJuegoTerminado() {
+        return new Juego(mazoSimple, 1, jugadores)
+                .tirar("tomas", new NumberedCard(Verde, 2));
+    }
 }

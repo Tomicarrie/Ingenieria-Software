@@ -24,7 +24,6 @@ public class Jugador {
         this.nombre = nombre;
         this.nextPlayer = nextPlayer;
         this.previousPlayer = previousPlayer;
-
     }
 
     public void cantarUno() {
