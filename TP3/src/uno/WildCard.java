@@ -1,7 +1,15 @@
 package uno;
 
 public class WildCard extends Card {
-    public String type = "Wild";
+
+    public int getNumber() {
+        throw new RuntimeException("Esta carta no tiene numero");
+    }
+
+    public String getSymbol() {
+        return "WildCard";
+    }
+
     public boolean accepts(Card aCard) {
         return true;
     }

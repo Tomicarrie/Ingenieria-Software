@@ -4,6 +4,11 @@ import java.util.List;
 
 public class Juego {
 
+    public static String TurnoIncorrecto = "No es el turno del jugador";
+    public static String CartasInsuficientes = "No hay suficientes cartas en el mazo para repartir";
+    public static String CartaInvalida = "No es una carta valida";
+    public static String JuegoFinalizado = "El juego ya ha finalizado";
+
     private List<Card> mazo = new ArrayList<Card>();
     private Jugador jugadorActual;
     private Card pit;
@@ -30,16 +35,10 @@ public class Juego {
 
     public Juego tirar(String nombre, ColoredCard card) {
 
-        if (terminado) {
-            throw new RuntimeException("El juego ya ha finalizado");
-        }
-
-        if (!jugadorActual.isPlayer(nombre)) {
-            throw new RuntimeException("No es el turno del jugador");
-        }
+        chequearJuegoEnCursoYTurnoActual(nombre);
 
         if (!card.accepts(pit)) {
-            throw new RuntimeException("No es una carta valida");
+            throw new RuntimeException(CartaInvalida);
         }
         jugadorActual.tirar(card);
 
@@ -53,7 +52,7 @@ public class Juego {
 
         this.pit = card;
 
-        if (jugadorTermina()) {
+        if (jugadorTermino()) {
             terminado = true;
         } else {
             this.pit.actionOn(this);
@@ -71,7 +70,7 @@ public class Juego {
         return this;
     }
 
-    private boolean jugadorTermina() {
+    private boolean jugadorTermino() {
         return jugadorActual.getNumCards() == 0;
     }
 
@@ -81,13 +80,7 @@ public class Juego {
 
     public Juego agarrar(String nombre) {
 
-        if (terminado) {
-            throw new RuntimeException("El juego ya ha finalizado");
-        }
-
-        if (!jugadorActual.isPlayer(nombre)) {
-            throw new RuntimeException("No es el turno del jugador");
-        }
+        chequearJuegoEnCursoYTurnoActual(nombre);
 
         jugadorActual.anularUno();
         jugadorActual.agarrar(mazo.removeFirst());
@@ -96,11 +89,32 @@ public class Juego {
         return this;
     }
 
+    public Juego agarrarYTirar(String nombre, ColoredCard card) {
+
+        chequearJuegoEnCursoYTurnoActual(nombre);
+        jugadorActual.agarrar(mazo.removeFirst());
+
+        tirar(jugadorActual.getNombre(), card);
+
+        avanzarTurno();
+        return this;
+    }
+
+    private void chequearJuegoEnCursoYTurnoActual(String nombre) {
+        if (terminado) {
+            throw new RuntimeException(JuegoFinalizado);
+        }
+
+        if (!jugadorActual.isPlayer(nombre)) {
+            throw new RuntimeException(TurnoIncorrecto);
+        }
+    }
+
     private Juego repartir() {
 
         int cantidadCartas = this.cartasARepartir;
         if (this.cartasARepartir > mazo.size()) {
-            throw new RuntimeException("No hay suficientes cartas en el mazo para repartir");
+            throw new RuntimeException(CartasInsuficientes);
         }
 
         while (cantidadCartas > 0) {

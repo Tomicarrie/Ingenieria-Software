@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Jugador {
+    public static String CartaInexistente = "El jugador no tiene esta carta";
     private List<Card> cards;
     public String nombre;
     private Jugador nextPlayer;
@@ -84,7 +85,7 @@ public class Jugador {
         }
 
         if (!cards.remove(aCard)) {
-            throw new RuntimeException("El jugador no tiene esta carta");
+            throw new RuntimeException(CartaInexistente);
         }
     }
 

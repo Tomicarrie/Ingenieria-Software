@@ -1,15 +1,21 @@
 package uno;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class ColoredCard extends Card {
     protected String color;
+    protected static List<String> coloresValidos = new ArrayList<>(List.of("verde", "amarillo", "rojo", "azul"));
+    public static String ColorInvalidoException = "No es un color valido. Las opciones son 'verde', 'amarillo', 'rojo' y 'azul'";
 
     public String getColor() {
         return color;
     }
 
-    public boolean colorIsValid(ColoredCard aCard) {
-        return aCard.getColor().equals(color);
+    public boolean colorEsValido(String color) {
+        return coloresValidos.contains(color);
     }
+
 
     public boolean equals(Object obj) {
 

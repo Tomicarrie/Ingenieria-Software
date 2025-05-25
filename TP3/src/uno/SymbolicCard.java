@@ -5,13 +5,19 @@ public abstract class SymbolicCard extends ColoredCard {
 
     public SymbolicCard(String color, String symbol) {
         super();
+        if (!colorEsValido(color)) {
+            throw new RuntimeException(ColoredCard.ColorInvalidoException);
+        }
         this.color = color;
         this.symbol = symbol;
-        this.type = "Symbolic";
+
     }
 
     public String getSymbol() {
         return symbol;
+    }
+    public int getNumber() {
+        throw new RuntimeException("Esta carta no tiene numero");
     }
 
     public boolean accepts(Card aCard) {

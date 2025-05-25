@@ -2,16 +2,9 @@ package uno;
 
 public abstract class Card {
 
-    protected String type;
+    public abstract int getNumber();
 
-    // BORRAR DPS
-    public int getNumber() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    // BORRAR DPS
-    public String getSymbol() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public abstract String getSymbol();
 
     public abstract boolean accepts(Card aCard);
 
