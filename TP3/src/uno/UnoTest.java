@@ -11,172 +11,188 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UnoTest {
+
+    public static String Verde = "verde";
+    public static String Amarillo = "amarillo";
+    public static String Azul = "azul";
+    public static String Rojo = "rojo";
+
+
     public List<Card> mazoSimple;
     public List<Card> mazoChico;
     public List<Card> mazoComplejo;
     public List<String> jugadores;
 
+
+
     @BeforeEach
     public void setUp() {
         mazoSimple = new ArrayList<>(List.of(
-                new NumberedCard("rojo", 2),
-                new NumberedCard("verde", 2),
-                new NumberedCard("verde", 4),
-                new NumberedCard("azul", 5),
-                new NumberedCard("verde", 4),
-                new NumberedCard("azul", 5),
-                new NumberedCard("amarillo", 4),
-                new NumberedCard("azul", 5),
-                new NumberedCard("amarillo", 4),
-                new NumberedCard("azul", 5),
-                new NumberedCard("amarillo", 4),
-                new NumberedCard("azul", 5),
-                new NumberedCard("amarillo", 4)
+                new NumberedCard(Rojo, 2),
+                new NumberedCard(Verde, 2),
+                new NumberedCard(Verde, 4),
+                new NumberedCard(Azul, 5),
+                new NumberedCard(Verde, 4),
+                new NumberedCard(Azul, 5),
+                new NumberedCard(Amarillo, 4),
+                new NumberedCard(Azul, 5),
+                new NumberedCard(Amarillo, 4),
+                new NumberedCard(Azul, 5),
+                new NumberedCard(Amarillo, 4),
+                new NumberedCard(Azul, 5),
+                new NumberedCard(Amarillo, 4)
         ));
         mazoChico= new ArrayList<>(List.of(
-                new NumberedCard("rojo", 2),
-                new ReverseCard("rojo"),
-                new NumberedCard("verde", 4),
-                new ReverseCard("rojo"),
-                new NumberedCard("verde", 4),
-                new NumberedCard("azul", 5),
-                new NumberedCard("amarillo", 4),
-                new NumberedCard("azul", 5),
-                new NumberedCard("amarillo", 4),
-                new NumberedCard("amarillo", 4)
+                new NumberedCard(Rojo, 2),
+                new ReverseCard(Rojo),
+                new NumberedCard(Verde, 4),
+                new ReverseCard(Rojo),
+                new NumberedCard(Verde, 4),
+                new NumberedCard(Azul, 5),
+                new NumberedCard(Amarillo, 4),
+                new NumberedCard(Azul, 5),
+                new NumberedCard(Amarillo, 4),
+                new NumberedCard(Amarillo, 4)
         ));
         jugadores = new ArrayList<>(List.of("tomas", "delfina", "emilio"));
         mazoComplejo = new ArrayList<>(List.of(
-                new NumberedCard("amarillo", 3),
-                new SkipCard("amarillo"),
-                new NumberedCard("azul", 2),
-                new SkipCard("amarillo"),
-                new DrawTwoCard("amarillo"),
-                new NumberedCard("amarillo", 3),
-                new ReverseCard("rojo"),
+                new NumberedCard(Amarillo, 3),
+                new SkipCard(Amarillo),
+                new NumberedCard(Azul, 2),
+                new SkipCard(Amarillo),
+                new DrawTwoCard(Amarillo),
+                new NumberedCard(Amarillo, 3),
+                new ReverseCard(Rojo),
                 new WildCard(),
-                new NumberedCard("rojo", 5),
+                new NumberedCard(Rojo, 5),
                 new WildCard(),
-                new ReverseCard("amarillo"),
-                new NumberedCard("amarillo", 5),
-                new NumberedCard("rojo", 4),
-                new DrawTwoCard("amarillo"),
-                new NumberedCard("rojo", 4),
-                new NumberedCard("verde", 1),
-                new NumberedCard("azul", 7),
-                new NumberedCard("rojo", 8)
+                new ReverseCard(Amarillo),
+                new NumberedCard(Amarillo, 5),
+                new NumberedCard(Rojo, 4),
+                new DrawTwoCard(Amarillo),
+                new NumberedCard(Rojo, 4),
+                new NumberedCard(Verde, 1),
+                new NumberedCard(Azul, 7),
+                new NumberedCard(Rojo, 8)
 
         ));
     }
 
     @Test
     public void testPitVacio() {
-        assertThrows(NoSuchElementException.class, () -> new JuegoEnCurso(new ArrayList<>(), 0, jugadores).pit());
+        assertThrows(NoSuchElementException.class, () -> new Juego(new ArrayList<>(), 0, jugadores).pit());
     }
 
     @Test public void testCartasInsuficientes() {
-        assertThrowsLike("No hay suficientes cartas en el mazo para repartir", () -> new JuegoEnCurso(mazoSimple, 10, jugadores));
+        assertThrowsLike("No hay suficientes cartas en el mazo para repartir", () -> new Juego(mazoSimple, 10, jugadores));
 
     }
 
     @Test
     public void testPitInicial() {
-        assertEquals(new NumberedCard("rojo", 2), new JuegoEnCurso(mazoSimple, 0, jugadores).pit());
+        assertEquals(new NumberedCard(Rojo, 2), new Juego(mazoSimple, 0, jugadores).pit());
     }
 
     @Test
     public void testTirarUnaCartaValida() {
-        assertEquals(new NumberedCard("verde", 2),
-                new JuegoEnCurso(mazoSimple, 2, jugadores)
-                        .tirar("tomas", new NumberedCard("verde", 2)).pit());
+        assertEquals(new NumberedCard(Verde, 2),
+                new Juego(mazoSimple, 2, jugadores)
+                        .tirar("tomas", new NumberedCard(Verde, 2)).pit());
 
     }
 
     @Test
     public void testJuegoFinalizado() {
-        assertThrowsLike("El juego ya ha finalizado",
-                () -> new JuegoEnCurso(mazoSimple, 1, jugadores)
-                        .tirar("tomas", new NumberedCard("verde", 2)).pit());
+
+        assertTrue(new Juego(mazoSimple, 1, jugadores)
+                .tirar("tomas", new NumberedCard(Verde, 2)).estaTerminado());
 
     }
 
-    @Test void testObtenerGanador() {
-        assertEquals("tomas", new JuegoEnCurso(mazoSimple, 1, jugadores)
-                                                .tirar("tomas", new NumberedCard("verde", 2)).getGanador());
-
-    }
 
     @Test public void testAvanzarTurno() {
-        assertEquals("delfina", new JuegoEnCurso(mazoSimple, 2, jugadores)
-                                                .tirar("tomas", new NumberedCard("verde", 2))
+        assertEquals("delfina", new Juego(mazoSimple, 2, jugadores)
+                                                .tirar("tomas", new NumberedCard(Verde, 2))
                                                 .getJugadorActual().getNombre());
     }
 
     @Test public void testJugadorSinCarta() {
-        assertThrowsLike("El jugador no tiene esta carta", () -> new JuegoEnCurso(mazoSimple, 1, jugadores)
-                .tirar("tomas", new NumberedCard("rojo", 4)));
+        assertThrowsLike("El jugador no tiene esta carta", () -> new Juego(mazoSimple, 1, jugadores)
+                .tirar("tomas", new NumberedCard(Rojo, 4)));
+    }
+
+    @Test public void testJugadorAgarraDelMazo() {
+        Juego juego = new Juego(mazoSimple, 1, jugadores).agarrar("tomas");
+
+        assertEquals("delfina", juego.getJugadorActual().getNombre());
+        juego.agarrar("delfina").agarrar("emilio");
+
+        assertEquals(2, juego.getJugadorActual().getNumCards());
+        assertThrowsLike("No es una carta valida", () -> juego.tirar("tomas", new NumberedCard(Verde, 4)));
+        assertEquals(new NumberedCard(Verde, 2), juego.tirar("tomas", new NumberedCard(Verde, 2)).pit());
+
     }
 
     @Test public void testTurnoEquivocado() {
-        assertThrowsLike("No es el turno del jugador", () -> new JuegoEnCurso(mazoSimple, 1, jugadores)
-                .tirar("delfina", new NumberedCard("verde", 4)));
+        assertThrowsLike("No es el turno del jugador", () -> new Juego(mazoSimple, 1, jugadores)
+                .tirar("delfina", new NumberedCard(Verde, 4)));
     }
 
     @Test public void testTirarDosCartas() {
-        assertEquals(new NumberedCard("verde", 4),
-                new JuegoEnCurso(mazoSimple, 2, jugadores)
-                        .tirar("tomas", new NumberedCard("verde", 2))
-                        .tirar("delfina", new NumberedCard("verde", 4)).pit());
+        assertEquals(new NumberedCard(Verde, 4),
+                new Juego(mazoSimple, 2, jugadores)
+                        .tirar("tomas", new NumberedCard(Verde, 2))
+                        .tirar("delfina", new NumberedCard(Verde, 4)).pit());
     }
 
 
     @Test public void testTirarCartaInvalida() {
         assertThrowsLike("No es una carta valida",
-                () -> new JuegoEnCurso(mazoSimple, 2, jugadores)
-                        .tirar("tomas", new NumberedCard("verde", 4)));
+                () -> new Juego(mazoSimple, 2, jugadores)
+                        .tirar("tomas", new NumberedCard(Verde, 4)));
     }
 
-    @Test public void testRondCompleta() {
+    @Test public void testRondaCompleta() {
 
-        assertEquals(new NumberedCard("verde", 4), new JuegoEnCurso(mazoSimple, 3, jugadores)
-                .tirar("tomas", new NumberedCard("verde", 2))
-                .tirar("delfina", new NumberedCard("verde", 4))
-                .tirar("emilio", new NumberedCard("amarillo", 4))
-                .tirar("tomas", new NumberedCard("verde", 4)).pit());
+        assertEquals(new NumberedCard(Verde, 4), new Juego(mazoSimple, 3, jugadores)
+                .tirar("tomas", new NumberedCard(Verde, 2))
+                .tirar("delfina", new NumberedCard(Verde, 4))
+                .tirar("emilio", new NumberedCard(Amarillo, 4))
+                .tirar("tomas", new NumberedCard(Verde, 4)).pit());
     }
 
 
     @Test public void testWildCard() {
-        Juego juego = new JuegoEnCurso(mazoComplejo, 4, jugadores).tirar("tomas", new WildCard().asignarColor("rojo"));
+        Juego juego = new Juego(mazoComplejo, 4, jugadores)
+                .tirar("tomas", new WildCard().asRed());
 
+        assertEquals(Rojo, juego.pit().getColor());
+        assertThrowsLike("No es una carta valida", () -> {juego.tirar("delfina", new NumberedCard(Azul, 2));});
         assertEquals("delfina", juego.getJugadorActual().getNombre());
-        assertEquals("rojo", juego.pit().getColor());
-        assertThrowsLike("No es una carta valida", () -> {juego.tirar("delfina", new NumberedCard("azul", 2));});
-        assertEquals("delfina", juego.getJugadorActual().getNombre());
-        assertEquals(new NumberedCard("rojo", 5), juego.tirar("delfina", new NumberedCard("rojo", 5)).pit());
-        assertEquals("amarillo", juego.tirar("emilio", new WildCard().asignarColor("amarillo")).pit().getColor());
+        assertEquals(new NumberedCard(Rojo, 5), juego.tirar("delfina", new NumberedCard(Rojo, 5)).pit());
+        assertEquals(Amarillo, juego.tirar("emilio", new WildCard().asYellow()).pit().getColor());
     }
 
     @Test public void testSkipCard() {
-        assertEquals("emilio",new JuegoEnCurso(mazoComplejo, 4, jugadores)
-                                        .tirar("tomas", new SkipCard("amarillo"))
+        assertEquals("emilio",new Juego(mazoComplejo, 4, jugadores)
+                                        .tirar("tomas", new SkipCard(Amarillo))
                                         .getJugadorActual().getNombre());
     }
 
     @Test public void testReverseCard() {
-        Juego juego =  new JuegoEnCurso(mazoComplejo, 4, jugadores)
-                        .tirar("tomas", new ReverseCard("amarillo"));
+        Juego juego =  new Juego(mazoComplejo, 4, jugadores)
+                        .tirar("tomas", new ReverseCard(Amarillo));
 
         assertEquals("emilio", juego.getJugadorActual().getNombre());
-        juego.tirar("emilio", new ReverseCard("rojo"));
+        juego.tirar("emilio", new ReverseCard(Rojo));
         assertEquals("tomas", juego.getJugadorActual().getNombre());
     }
 
     @Test public void testDrawTwoCard() {
-        Juego juego = new JuegoEnCurso(mazoComplejo, 4, jugadores).tirar("tomas", new DrawTwoCard("amarillo"))
-                .tirar("emilio", new SkipCard("amarillo"));
+        Juego juego = new Juego(mazoComplejo, 4, jugadores).tirar("tomas", new DrawTwoCard(Amarillo))
+                .tirar("emilio", new SkipCard(Amarillo));
         assertEquals(6, juego.getJugadorActual().getCards().size());
-        juego.tirar("delfina", new DrawTwoCard("amarillo")); // tira una que levanta del mazo
+        juego.tirar("delfina", new DrawTwoCard(Amarillo)); // tira una que levanta del mazo
     }
 
 
@@ -187,25 +203,25 @@ public class UnoTest {
 
     @Test public void testCantarUno() {
 
-        Juego juego =  new JuegoEnCurso(mazoChico, 2, jugadores)
-                        .tirarYCantarUno("tomas", new ReverseCard("rojo"))
-                        .tirar("emilio", new ReverseCard("rojo"));
+        Juego juego =  new Juego(mazoChico, 2, jugadores)
+                        .tirarYCantarUno("tomas", new ReverseCard(Rojo))
+                        .tirar("emilio", new ReverseCard(Rojo));
 
         assertTrue(juego.getJugadorActual().cantoUno());
     }
 
     @Test public void testFalsoCantarUno() {
 
-        Juego juego =  new JuegoEnCurso(mazoChico, 3, jugadores).tirarYCantarUno("tomas", new ReverseCard("rojo"))
-                .tirar("emilio", new ReverseCard("rojo"));
+        Juego juego =  new Juego(mazoChico, 3, jugadores).tirarYCantarUno("tomas", new ReverseCard(Rojo))
+                .tirar("emilio", new ReverseCard(Rojo));
         assertFalse(juego.getJugadorActual().cantoUno());
     }
 
     @Test
     public void testNoSePuedeTirarLuegoDeGanar() {
-        assertThrowsLike("El juego ya ha finalizado", () -> new JuegoEnCurso(mazoSimple, 1, jugadores)
-                                                                        .tirar("tomas", new NumberedCard("verde", 2))
-                                                                        .tirar("delfina", new NumberedCard("verde", 4)));
+        assertThrowsLike("El juego ya ha finalizado", () -> new Juego(mazoSimple, 1, jugadores)
+                                                                        .tirar("tomas", new NumberedCard(Verde, 2))
+                                                                        .tirar("delfina", new NumberedCard(Verde, 4)));
     }
 
 }

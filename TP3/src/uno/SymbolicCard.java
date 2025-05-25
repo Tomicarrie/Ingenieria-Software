@@ -19,5 +19,5 @@ public abstract class SymbolicCard extends ColoredCard {
     }
     public boolean acceptsSymbol(SymbolicCard aCard) {return symbol.equals(aCard.getSymbol());}
     public boolean acceptsNumber(NumberedCard aCard) {return false;}
-    public abstract void actionOn(JuegoEnCurso juego);
+    public abstract void actionOn(Juego juego);
 }

@@ -10,19 +10,6 @@ public class Jugador {
     private Jugador previousPlayer;
     boolean uno;
 
-
-    public void cantarUno() {
-        if (cards.size() == 2) {
-            this.uno = true;
-        }
-    }
-
-    public void anularUno() {
-        this.uno = false;
-    }
-
-    public boolean cantoUno() { return this.uno; }
-
     public Jugador(String nombre) {
         this.cards = new ArrayList<>();
         this.nombre = nombre;
@@ -39,6 +26,18 @@ public class Jugador {
         this.previousPlayer = previousPlayer;
 
     }
+
+    public void cantarUno() {
+        if (cards.size() == 2) {
+            this.uno = true;
+        }
+    }
+
+    public void anularUno() {
+        this.uno = false;
+    }
+
+    public boolean cantoUno() { return this.uno; }
 
     public boolean isPlayer(String nombre) {
         return this.nombre.equals(nombre);
@@ -93,10 +92,5 @@ public class Jugador {
     public void agarrar(Card aCard) {
         cards.add(aCard);
     }
-
-    public String getName() {
-        return nombre;
-    }
-
 
 }

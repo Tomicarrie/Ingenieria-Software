@@ -5,7 +5,7 @@ public class ReverseCard extends SymbolicCard {
         super(color, "Reverse");
     }
 
-    public void actionOn(JuegoEnCurso juego) {
+    public void actionOn(Juego juego) {
         juego.comportamientoReverse();
     }
 }

@@ -22,11 +22,22 @@ public class WildCard extends Card {
         return true;
     }
 
-    public void actionOn(JuegoEnCurso juego) {
+    public void actionOn(Juego juego) {
         return;
     }
 
-    public ColoredCard asignarColor(String color) {
-        return new ColoredWildCard(color);
+
+    public ColoredCard asRed() {
+        return new ColoredWildCard(UnoTest.Rojo);
     }
+    public ColoredCard asBlue() {
+        return new ColoredWildCard(UnoTest.Azul);
+    }
+    public ColoredCard asGreen() {
+        return new ColoredWildCard(UnoTest.Verde);
+    }
+    public ColoredCard asYellow() {
+        return new ColoredWildCard(UnoTest.Amarillo);
+    }
+
 }
